@@ -92,15 +92,14 @@ body{font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif;color:#111;line-heigh
 
 .about-hero{padding:48px 16px 80px}
 .about-panel{background:rgba(255,255,255,0.9);border-radius:12px;padding:28px;box-shadow:0 18px 40px rgba(20,20,20,0.06);backdrop-filter:blur(6px)}
-.about-grid{display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:center}
-.about-media{height:260px;border-radius:8px;background-image:url('images/stationery-hero.jpg');background-size:cover;background-position:center;filter:saturate(1.05) contrast(0.98);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02)}
+.about-grid{display:block;max-width:900px;margin:0 auto}
+/* removed .about-media element — content now fills the panel */
 .about-content h1{font-size:28px;margin-bottom:10px}
 .about-content p{color:#333;margin-bottom:12px}
 .about-content blockquote{margin:18px 0;padding:12px 16px;background:linear-gradient(90deg,#fff,#fbfbfb);border-left:4px solid var(--accent);font-style:italic;color:#222}
 
 @media (max-width:900px){
-  .about-grid{grid-template-columns:1fr}
-  .about-media{height:180px}
+  .about-hero{padding:28px 12px}
 }
 
 /* Responsive styles */
