@@ -1,0 +1,124 @@
+/* Basic reset */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--max-width:1200px;--accent:#E86E66;--muted:#666}
+/* approximate header height used to limit carousel height so banner fits in viewport */
+:root{--header-height:120px}
+
+body{font-family:Inter,Segoe UI,Arial,Helvetica,sans-serif;color:#111;line-height:1.4}
+.container{max-width:var(--max-width);margin:0 auto;padding:0 16px}
+
+/* Header top */
+.site-header{background:#fff;border-bottom:1px solid #eee;position:sticky;top:0;z-index:60}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{display:flex;align-items:center}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-name{font-weight:700;letter-spacing:1px}
+
+/* Brand image */
+.brand-image{height:40px;max-width:160px;object-fit:contain;border-radius:6px;display:inline-block}
+
+/* visually hidden but accessible text */
+.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+
+/* Search area */
+.search-area{display:flex;align-items:center;gap:12px;flex:1;margin:0 24px}
+.categories-btn{background:#f3f3f3;border:1px solid #ececec;padding:10px 14px;border-radius:22px;font-weight:600;cursor:pointer}
+.search-box{display:flex;flex:1;align-items:center;background:#f7f7f7;border-radius:28px;padding:6px 8px;border:1px solid #eee}
+.search-box input{flex:1;border:0;background:transparent;padding:10px 12px;font-size:15px}
+.search-box input:focus{outline:none}
+.search-btn{border:0;background:transparent;font-size:18px;cursor:pointer;padding:8px}
+
+/* Header actions */
+.header-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{background:transparent;border:0;font-size:20px;cursor:pointer}
+.hamburger{display:none;background:transparent;border:0;font-size:20px;cursor:pointer}
+
+/* Nav */
+.main-nav{background:#fff}
+.nav-inner{padding:8px 0}
+.nav-list{display:flex;gap:22px;list-style:none}
+.nav-list a{text-decoration:none;color:#111;font-weight:600;padding:8px 6px}
+.nav-list a:hover{color:var(--accent)}
+
+/* Categories panel */
+.categories-panel{position:absolute;left:50%;transform:translateX(-50%);top:72px;background:#fff;border:1px solid #eee;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06);padding:12px;z-index:70}
+.categories-panel ul{list-style:none}
+.categories-panel li{padding:8px 12px;cursor:pointer}
+.categories-panel li:hover{background:#f6f6f6}
+
+/* Hero */
+.hero{padding:0}
+
+/* Carousel */
+.carousel{position:relative;overflow:hidden}
+
+/* Make carousel full-bleed (edge-to-edge) while staying inside .hero container */
+.hero .carousel{left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;width:100vw;border-radius:0}
+.carousel-track{display:flex;transition:transform 600ms ease-in-out;width:100%}
+.carousel-slide{flex:0 0 100%;display:flex;align-items:center;justify-content:center;background:#f3f3f3}
+.carousel-slide img{width:100%;height:auto;display:block;max-height:calc(100vh - var(--header-height));object-fit:contain}
+
+/* arrows */
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:8px;background:#fff;border:0;box-shadow:0 6px 18px rgba(0,0,0,0.12);cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;padding:0}
+.carousel-arrow.prev{left:14px}
+.carousel-arrow.next{right:14px}
+.carousel-arrow:focus{outline:2px solid rgba(0,0,0,0.08)}
+
+.carousel-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;display:flex;gap:8px}
+.carousel-dot{height:8px;border-radius:4px;background:rgba(255,255,255,0.85);cursor:pointer;border:0;transition:all 220ms}
+.carousel-dot{width:8px}
+.carousel-dot.active{width:44px;background:#111}
+
+/* make carousel shorter on small screens */
+@media (max-width: 720px){
+  .carousel-slide{min-height:220px}
+  .carousel-arrow{width:36px;height:36px;font-size:18px}
+}
+
+/* About modal removed: About opens in a separate page `about.html` */
+
+/* About page visuals */
+.about-page{
+  /* subtle ruled-paper background with optional decorative image overlay (place images/stationery-bg.png to use) */
+  background-color: #f6f7f8;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+    repeating-linear-gradient(rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 36px),
+    url('images/stationery-bg.png');
+  background-position: center top, center top, center top;
+  background-repeat: repeat, repeat, no-repeat;
+  background-size: auto, auto, cover;
+}
+
+.about-hero{padding:48px 16px 80px}
+.about-panel{background:rgba(255,255,255,0.9);border-radius:12px;padding:28px;box-shadow:0 18px 40px rgba(20,20,20,0.06);backdrop-filter:blur(6px)}
+.about-grid{display:grid;grid-template-columns:1fr 2fr;gap:20px;align-items:center}
+.about-media{height:260px;border-radius:8px;background-image:url('images/stationery-hero.jpg');background-size:cover;background-position:center;filter:saturate(1.05) contrast(0.98);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02)}
+.about-content h1{font-size:28px;margin-bottom:10px}
+.about-content p{color:#333;margin-bottom:12px}
+.about-content blockquote{margin:18px 0;padding:12px 16px;background:linear-gradient(90deg,#fff,#fbfbfb);border-left:4px solid var(--accent);font-style:italic;color:#222}
+
+@media (max-width:900px){
+  .about-grid{grid-template-columns:1fr}
+  .about-media{height:180px}
+}
+
+/* Responsive styles */
+@media (max-width: 900px){
+  .search-area{margin:0 12px}
+  .nav-list{gap:12px}
+}
+
+@media (max-width: 720px){
+  .search-area{display:none}
+  .nav-list{display:none}
+  .hamburger{display:inline-block}
+  .categories-btn{display:none}
+  .main-nav.open .nav-list{display:flex;flex-direction:column}
+  .nav-inner{padding:12px 0}
+  .nav-list a{display:block;padding:12px 6px}
+  .categories-panel{left:16px;transform:none;top:110px;width:calc(100% - 32px)}
+}
+
+/* small touches */
+button{font-family:inherit}

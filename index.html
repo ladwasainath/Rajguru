@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rajguru</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-top">
+      <div class="brand">
+        <!-- Brand image: replace `rajguru.png` with your actual image file -->
+        <a href="#" class="logo" aria-label="Rajguru demo home">
+          <img src="Rajguru.jpg" alt="Rajguru" class="brand-image">
+          <!-- visible text replaced with an accessible fallback -->
+          <span class="brand-name sr-only">Rajguru</span>
+        </a>
+      </div>
+
+      <div class="search-area">
+        <button class="categories-btn" id="categoriesBtn" aria-haspopup="listbox" aria-expanded="false">All Categories ▾</button>
+        <div class="search-box">
+          <input type="search" id="mainSearch" placeholder="What are you looking for?" aria-label="Search site">
+          <button id="searchBtn" class="search-btn" aria-label="Search">🔍</button>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Account">👤</button>
+        <button class="icon-btn" aria-label="Cart">🛒</button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+
+    <nav class="main-nav" id="mainNav">
+      <div class="container nav-inner">
+        <ul class="nav-list">
+          <li><a href="#">Stationery</a></li>
+          <li><a href="#">Office Supplies</a></li>
+          <li><a href="#">Art Supplies</a></li>
+          <li><a href="#">Craft Material</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Shop By Brand</a></li>
+          <li><a href="about.html" target="_blank" rel="noopener">About</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- simple category list that toggles from the All Categories button -->
+    <div class="categories-panel" id="categoriesPanel" hidden>
+      <ul role="listbox" aria-label="Categories">
+        <li>All Categories</li>
+        <li>Stationery</li>
+        <li>Office Supplies</li>
+        <li>Art Supplies</li>
+        <li>Craft Material</li>
+        <li>Best Sellers</li>
+        <li>Shop By Brand</li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- Carousel: slides will auto-advance every 2.5s -->
+    <section class="hero container">
+      <div class="carousel" id="heroCarousel" aria-roledescription="carousel">
+        <div class="carousel-track">
+          <div class="carousel-slide">
+            <img src="images/building.jpg" alt="Featured image 1">
+          </div>
+          <div class="carousel-slide">
+            <img src="images/shop.jpg" alt="Featured image 2">
+          </div>
+        </div>
+        <!-- arrows like Flipkart: white rounded cards with chevrons -->
+        <button class="carousel-arrow prev" aria-label="Previous slide">‹</button>
+        <button class="carousel-arrow next" aria-label="Next slide">›</button>
+        <div class="carousel-dots" id="carouselDots" aria-hidden="false"></div>
+      </div>
+    </section>
+  </main>
+
+  
+
+  <script src="script.js"></script>
+</body>
+</html>
