@@ -40,10 +40,10 @@ mainSearch && mainSearch.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') searchBtn.click();
 });
 
-/* Carousel autoplay (sideways sliding every 2.5s) */
-(() => {
+/* Carousel: initialize/destroy helpers so we can swap main content dynamically */
+function initCarousel() {
   const carousel = document.getElementById('heroCarousel');
-  if (!carousel) return;
+  if (!carousel) return null;
 
   const track = carousel.querySelector('.carousel-track');
   const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
@@ -53,7 +53,8 @@ mainSearch && mainSearch.addEventListener('keydown', (e) => {
   const intervalMs = 2500;
   let timer = null;
 
-  // create dots
+  // build dots (clear existing)
+  if (dotsContainer) dotsContainer.innerHTML = '';
   for (let i = 0; i < total; i++) {
     const dot = document.createElement('button');
     dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
@@ -90,18 +91,117 @@ mainSearch && mainSearch.addEventListener('keydown', (e) => {
   function restartTimer() { stopTimer(); startTimer(); }
 
   // pause on pointer enter
-  carousel.addEventListener('mouseenter', stopTimer);
-  carousel.addEventListener('mouseleave', startTimer);
+  const onEnter = () => stopTimer();
+  const onLeave = () => startTimer();
+  carousel.addEventListener('mouseenter', onEnter);
+  carousel.addEventListener('mouseleave', onLeave);
 
   // arrow buttons
   const prevBtn = carousel.querySelector('.carousel-arrow.prev');
   const nextBtn = carousel.querySelector('.carousel-arrow.next');
-  if (prevBtn) prevBtn.addEventListener('click', () => { current = (current - 1 + total) % total; update(); restartTimer(); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { next(); restartTimer(); });
+  const prevHandler = () => { current = (current - 1 + total) % total; update(); restartTimer(); };
+  const nextHandler = () => { next(); restartTimer(); };
+  if (prevBtn) prevBtn.addEventListener('click', prevHandler);
+  if (nextBtn) nextBtn.addEventListener('click', nextHandler);
 
-  // ensure slides have correct width (CSS handles this) then start
+  // start
   update();
   startTimer();
-})();
+
+  function destroy() {
+    stopTimer();
+    carousel.removeEventListener('mouseenter', onEnter);
+    carousel.removeEventListener('mouseleave', onLeave);
+    if (prevBtn) prevBtn.removeEventListener('click', prevHandler);
+    if (nextBtn) nextBtn.removeEventListener('click', nextHandler);
+    if (dotsContainer) dotsContainer.innerHTML = '';
+  }
+
+  const controller = { destroy };
+  window.heroCarouselController = controller;
+  return controller;
+}
+
+// initialize carousel on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  initCarousel();
+});
 
 // (About modal removed; About now opens a separate page `about.html` in a new tab)
+// --- Dynamic navigation: load internal pages into #mainContent and use History API ---
+(function(){
+  const mainContent = document.getElementById('mainContent');
+  if (!mainContent) return;
+
+  // ensure initial state stores current content
+  history.replaceState({html: mainContent.innerHTML, title: document.title}, document.title, window.location.href);
+
+  // helper to initialize interactive bits in loaded content
+  function initPageFeatures(){
+    // init carousel if present
+    try { initCarousel(); } catch(e){ /* ignore */ }
+  }
+
+  async function loadPage(url){
+    try {
+      const res = await fetch(url, {credentials: 'same-origin'});
+      if (!res.ok) { window.location.href = url; return; }
+      const text = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/html');
+      const newMain = doc.querySelector('main');
+      const newTitle = doc.title || '';
+
+      // destroy carousel before replacing content
+      if (window.heroCarouselController && typeof window.heroCarouselController.destroy === 'function') {
+        window.heroCarouselController.destroy();
+        window.heroCarouselController = null;
+      }
+
+      // push state with the new content
+      history.pushState({html: newMain ? newMain.innerHTML : text, title: newTitle}, newTitle, url);
+
+      // swap content
+      mainContent.innerHTML = newMain ? newMain.innerHTML : text;
+      document.title = newTitle;
+
+      // re-run page features for the loaded content
+      initPageFeatures();
+      window.scrollTo(0,0);
+    } catch(err){
+      console.error('Failed to load page', err);
+      window.location.href = url;
+    }
+  }
+
+  // intercept clicks on internal links that point to about.html (or same-origin)
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href) return;
+    // only handle same-origin paths and specifically about.html
+    if (href.endsWith('about.html')){
+      e.preventDefault();
+      loadPage(href);
+    }
+  });
+
+  // handle back/forward
+  window.addEventListener('popstate', (e) => {
+    const state = e.state;
+    if (state && state.html !== undefined){
+      // destroy any active carousel first
+      if (window.heroCarouselController && typeof window.heroCarouselController.destroy === 'function') {
+        window.heroCarouselController.destroy();
+        window.heroCarouselController = null;
+      }
+      mainContent.innerHTML = state.html;
+      document.title = state.title || document.title;
+      initPageFeatures();
+    } else {
+      // no state: reload to be safe
+      window.location.reload();
+    }
+  });
+})();
